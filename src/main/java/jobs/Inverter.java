@@ -11,30 +11,21 @@ public class Inverter {
 
   public List<JobWithPortfolios> invert(List<PortfolioWithJobs> portfoliosWithJobs) {
 
-    return portfoliosByJobs(portfoliosWithJobs)
+    return portfoliosByJob(portfoliosWithJobs)
       .entrySet()
       .stream()
-      .map(
-        entry -> {
-          Job job = entry.getKey();
-          List<Portfolio> portfolios = entry.getValue();
-          return new JobWithPortfolios(job.getUrn(), job.getName(), portfolios);
-        }
-      )
+      .map(e -> new JobWithPortfolios(e.getKey().getUrn(), e.getKey().getName(), e.getValue()))
       .collect(toList());
   }
 
-  private Map<Job, List<Portfolio>> portfoliosByJobs(List<PortfolioWithJobs> portfoliosWithJobs) {
+  private Map<Job, List<Portfolio>> portfoliosByJob(List<PortfolioWithJobs> portfoliosWithJobs) {
     Map<Job, List<Portfolio>> result = new HashMap<>();
 
     portfoliosWithJobs.forEach(
       portfolio -> portfolio.getJobs().forEach(
-        job -> {
-          if (!result.containsKey(job)) {
-            result.put(job, new ArrayList<>());
-          }
-          result.get(job).add(new Portfolio(portfolio.getUrn(), portfolio.getName()));
-        }
+        job -> result
+          .computeIfAbsent(job, v -> new ArrayList<>())
+          .add(new Portfolio(portfolio.getUrn(), portfolio.getName()))
       )
     );
 
