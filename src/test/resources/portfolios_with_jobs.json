@@ -1,0 +1,53 @@
+[
+  {
+    "urn": "urn:example:portfolio:1",
+    "name": "Default",
+    "jobs": [
+      {
+        "urn": "urn:example:job:10",
+        "name": "RN Nurse"
+      },
+      {
+        "urn": "urn:example:job:11",
+        "name": "Nurse Practitioner"
+      }
+    ]
+  },
+  {
+    "urn": "urn:example:portfolio:2",
+    "name": "Critical",
+    "jobs": [
+      {
+        "urn": "urn:example:job:10",
+        "name": "RN Nurse"
+      },
+      {
+        "urn": "urn:example:job:12",
+        "name": "OR Nurse"
+      }
+    ]
+  },
+  {
+    "urn": "urn:example:portfolio:3",
+    "name": "Extra Critical",
+    "jobs": [
+      {
+        "urn": "urn:example:job:10",
+        "name": "RN Nurse"
+      },
+      {
+        "urn": "urn:example:job:12",
+        "name": "OR Nurse"
+      },
+      {
+        "urn": "urn:example:job:11",
+        "name": "Nurse Practitioner"
+      }
+    ]
+  },
+  {
+    "urn": "urn:example:portfolio:4",
+    "name": "Non Critical",
+    "jobs": []
+  }
+]
