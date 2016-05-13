@@ -5,35 +5,39 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.stream.Collectors.toList;
+
 public class Inverter {
 
   public List<JobWithPortfolios> invert(List<PortfolioWithJobs> portfoliosWithJobs) {
 
-    List<JobWithPortfolios> jobsWithPortfolios = new ArrayList<>();
-
-    for (Map.Entry<Job, List<Portfolio>> entry : portfoliosByJobs(portfoliosWithJobs).entrySet()) {
-      Job job = entry.getKey();
-      List<Portfolio> portfolios = entry.getValue();
-      jobsWithPortfolios.add(new JobWithPortfolios(job.getUrn(), job.getName(), portfolios));
-    }
-
-    return jobsWithPortfolios;
+    return portfoliosByJobs(portfoliosWithJobs)
+      .entrySet()
+      .stream()
+      .map(
+        entry -> {
+          Job job = entry.getKey();
+          List<Portfolio> portfolios = entry.getValue();
+          return new JobWithPortfolios(job.getUrn(), job.getName(), portfolios);
+        }
+      )
+      .collect(toList());
   }
 
-  private Map<Job, List<Portfolio>> portfoliosByJobs(List<PortfolioWithJobs> portfolios) {
-    Map<Job, List<Portfolio>> portfoliosByJobs = new HashMap<>();
+  private Map<Job, List<Portfolio>> portfoliosByJobs(List<PortfolioWithJobs> portfoliosWithJobs) {
+    Map<Job, List<Portfolio>> result = new HashMap<>();
 
-    for (PortfolioWithJobs portfolio : portfolios) {
-      for (Job job : portfolio.getJobs()) {
-
-        if (!portfoliosByJobs.containsKey(job)) {
-          portfoliosByJobs.put(job, new ArrayList<>());
+    portfoliosWithJobs.forEach(
+      portfolio -> portfolio.getJobs().forEach(
+        job -> {
+          if (!result.containsKey(job)) {
+            result.put(job, new ArrayList<>());
+          }
+          result.get(job).add(new Portfolio(portfolio.getUrn(), portfolio.getName()));
         }
+      )
+    );
 
-        portfoliosByJobs.get(job).add(new Portfolio(portfolio.getUrn(), portfolio.getName()));
-      }
-    }
-
-    return portfoliosByJobs;
+    return result;
   }
 }
